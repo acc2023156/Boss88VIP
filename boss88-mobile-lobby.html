@@ -139,6 +139,7 @@
     <button class="wallet-close" aria-label="關閉錢包">×</button>
   </div>
 </section>
+<script src="lks-config.js"></script>
 <script>
   const catalog=[
     ['急速百家','🎴','#a72831','#4b1018','poker','','','speed_baccarat_TCH.png'],['21點','♠️','#5a2c75','#241038','poker','','','blackjack_TCH.png'],['三路百家','🃏','#b0392e','#521513','poker','','','3_road_baccarat_TCH.png'],['急速龍虎','🐯','#513285','#1f153f','poker','','','speed_dragon_tiger_TCH.png'],['射龍門','🎯','#d94d26','#7d170e','poker','','','inbetween_TCH.png'],['經典龍虎','🐉','#7b2d75','#351236','poker','','','classic_dragon_tiger_TCH.png'],
@@ -147,12 +148,12 @@
     ['MINES','💎','#24527f','#061528','exclusive','2,129','','mines_TCH.png'],['DICE','🎲','#5d3a1c','#1d130b','exclusive','1,992','','dice_TCH.png'],['PLINKO','⚪','#61421f','#1c1208','exclusive','1,581','','plinko_TCH.png'],['CRASH','🚀','#28609c','#0a1b34','exclusive','1,307','','crash_TCH.png']
   ];
   const games=document.querySelector('#games'),dialog=document.querySelector('#gameDialog'),modalArt=document.querySelector('#modalArt'),modalOfferName=document.querySelector('#modalOfferName'),modalStatus=document.querySelector('#modalStatus'),playButton=document.querySelector('.play'),balance=document.querySelector('#balance');let active='slots',selectedGame='';const favorites=new Set([1]);
-  const lkgDemoBase='https://lk-slots-demo-602887045856.asia-east1.run.app';
+  const lkgDemoBase=LKS_CONFIG.mainUrl;
   /* LKS games are opened through the LKS API, not through the LKS website:
      CreateMember + CreateGameToken on the game service -> the API returns the game's own URL with a one-time token -> go there.
      Product IDs are the ones the LKS lobby uses. DEMO ONLY: partner id/key sit in this page like they do on the LKS pages;
      a production version must sign these calls on a server and never ship the key to the browser. */
-  const lkgApi='https://lk-legacy-demo-602887045856.asia-east1.run.app',lkgPartner={sid:'886241001',skey:'0bb836751b0ea7a685bce0f6fd5f0456',account:'river001',lang:'zh-TW'};
+  const lkgApi=LKS_CONFIG.apiUrl,lkgPartner=LKS_CONFIG.partner;
   /* Games are told where the player came from, so the game's back button returns to this lobby (labelled 返回大廳). */
   const lkgReturn=encodeURIComponent(location.origin+location.pathname);
   const lkgProducts={'雷神索爾':91004,'惡魔偵探':91008,'財神':91009,'羅馬競技場':91006,'金銀島':91005,'開心農場':91007};
