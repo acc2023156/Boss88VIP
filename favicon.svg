@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="35%" r="75%">
+      <stop offset="0" stop-color="#e3312a"/>
+      <stop offset="1" stop-color="#76120f"/>
+    </radialGradient>
+    <linearGradient id="boat" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff2a2"/>
+      <stop offset=".4" stop-color="#ffc641"/>
+      <stop offset="1" stop-color="#b9761a"/>
+    </linearGradient>
+    <linearGradient id="dome" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffbe0"/>
+      <stop offset=".55" stop-color="#ffd35a"/>
+      <stop offset="1" stop-color="#c98a1e"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <rect x="3" y="3" width="58" height="58" rx="11" fill="none" stroke="#ffd35a" stroke-opacity=".5" stroke-width="2"/>
+  <path d="M19.5 36 C19.5 23.5 25 16 32 16 C39 16 44.5 23.5 44.5 36 Z" fill="url(#dome)" stroke="#8a5210" stroke-width="1.5"/>
+  <path d="M7 27 C12.5 27 16 34.5 21.5 34.5 H42.5 C48 34.5 51.5 27 57 27 C57 42.5 46 51 32 51 C18 51 7 42.5 7 27 Z" fill="url(#boat)" stroke="#8a5210" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M11 31 C15.5 32.5 18 37.5 22.5 37.5 H41.5 C46 37.5 48.5 32.5 53 31" fill="none" stroke="#fff6c4" stroke-width="1.6" stroke-linecap="round" opacity=".85"/>
+  <ellipse cx="27.5" cy="23.5" rx="2.6" ry="4.2" fill="#fff" opacity=".75" transform="rotate(-22 27.5 23.5)"/>
+  <circle cx="50" cy="15" r="1.6" fill="#fff6c4"/><circle cx="14" cy="17" r="1.1" fill="#fff6c4" opacity=".8"/>
+</svg>
