@@ -153,17 +153,19 @@
      Product IDs are the ones the LKS lobby uses. DEMO ONLY: partner id/key sit in this page like they do on the LKS pages;
      a production version must sign these calls on a server and never ship the key to the browser. */
   const lkgApi='https://lk-legacy-demo-602887045856.asia-east1.run.app',lkgPartner={sid:'886241001',skey:'0bb836751b0ea7a685bce0f6fd5f0456',account:'river001',lang:'zh-TW'};
+  /* Games are told where the player came from, so the game's back button returns to this lobby (labelled 返回大廳). */
+  const lkgReturn=encodeURIComponent(location.origin+location.pathname);
   const lkgProducts={'雷神索爾':91004,'惡魔偵探':91008,'財神':91009,'羅馬競技場':91006,'金銀島':91005,'開心農場':91007};
   function lkgLoadMd5(){return window.md5?Promise.resolve():new Promise((ok,fail)=>{const sc=document.createElement('script');sc.src=lkgApi+'/web/js/md5.min.js';sc.onload=ok;sc.onerror=()=>fail(new Error('md5'));document.head.appendChild(sc)})}
   async function lkgCall(path){const stamp=String(parseInt(Date.now()/10000000)),key='1234'+md5(lkgPartner.sid+lkgPartner.skey+stamp)+'5678',r=await fetch(lkgApi+path,{headers:{lkssid:lkgPartner.sid,lkskey:key}});return r.json()}
   async function lkgLaunch(pid){await lkgLoadMd5();const acc=encodeURIComponent(lkgPartner.account),m=await lkgCall('/lks/CreateMember?AccountName='+acc+'&AccountPWD=1234');if(m.StatusResult!==0)throw new Error('CreateMember '+m.StatusResult);const t=await lkgCall('/lks/CreateGameToken?PID='+pid+'&AccountName='+acc);if(t.StatusResult!==0||!t.Url||!t.Token)throw new Error('CreateGameToken '+t.StatusResult);
-    /* the LKS client splits its URL on '?', so the format is fixed: <game>?lang=<lang>?otp=<token> */
-    location.href=t.Url+'?lang='+lkgPartner.lang+'?otp='+t.Token}
+    /* the LKS client splits its URL on '?', so the format is fixed: <game>?lang=<lang>?otp=<token>?return=<this lobby> */
+    location.href=t.Url+'?lang='+lkgPartner.lang+'?otp='+t.Token+'?return='+lkgReturn}
   const gameRoutes={
     '麻將胡了':'https://acc2023156.github.io/MJW/',
-    'PLINKO':`${lkgDemoBase}/plinko/index.html?lang=zh-TW`,
+    'PLINKO':`${lkgDemoBase}/plinko/index.html?lang=zh-TW&return=${lkgReturn}`,
     'CRASH':'https://acc2023156.github.io/Crash/',
-    '戰神賽特':`${lkgDemoBase}/seth-slot/slot_game.html?lang=zh-TW`
+    '戰神賽特':`${lkgDemoBase}/seth-slot/slot_game.html?lang=zh-TW&return=${lkgReturn}`
   };
   function render(){games.innerHTML='';catalog.forEach((g,i)=>{if(g[4]!==active)return;const exclusive=g[4]==='exclusive',slots=g[4]==='slots',maintenance=g[6]==='maintenance',symbol=g[7]?`<img src="${g[7]}" alt="">`:g[1],badge=exclusive?'<span class="exp">2X EXP</span>':slots?'':`<button class="fav ${favorites.has(i)?'on':''}" aria-label="收藏">♥</button>`;const b=document.createElement('article');b.className='game'+(exclusive?' exclusive':'')+(slots?' slots':'')+(maintenance?' maintenance':'');b.tabIndex=maintenance?-1:0;b.role='button';b.style.setProperty('--c1',g[2]);b.style.setProperty('--c2',g[3]);b.innerHTML=`${badge}<span class="symbol">${symbol}</span>${slots?'':`<span class="name">${g[0]}</span>`}${exclusive?`<span class="playing">${g[5]} 人在玩</span>`:slots?`<span class="rtp">LIVE RTP <b>${g[5]}</b></span>`:'<span class="vip">VIP1 <span class="lock">🔒</span></span>'}${maintenance?'<span class="maintenance">維護中</span>':''}`;const fav=b.querySelector('.fav');if(fav)fav.onclick=e=>{e.stopPropagation();favorites.has(i)?favorites.delete(i):favorites.add(i);render()};if(!maintenance){b.onclick=()=>{selectedGame=g[0];const hasRoute=Boolean(gameRoutes[selectedGame]);modalArt.innerHTML=g[7]?`<img src="${g[7]}" alt="${g[0]} ICON">`:`<span aria-hidden="true">${g[1]}</span>`;modalOfferName.textContent=g[0];modalStatus.hidden=true;modalStatus.textContent='';playButton.textContent=hasRoute?'進入遊戲':'模擬進入';dialog.showModal()};b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();b.click()}}};games.appendChild(b)})}
   const catFx={exclusive:'cat-fx-exclusive',slots:'cat-fx-slots',poker:'cat-fx-poker',fish:'cat-fx-fish'};document.querySelectorAll('.cat').forEach(b=>b.onclick=()=>{const fx=catFx[b.dataset.cat];document.querySelectorAll('.cat').forEach(x=>{x.classList.remove('active');x.classList.remove(...Object.values(catFx))});b.classList.add('active');active=b.dataset.cat;render();renderHero(active);requestAnimationFrame(()=>b.classList.add(fx));setTimeout(()=>b.classList.remove(fx),950)});
